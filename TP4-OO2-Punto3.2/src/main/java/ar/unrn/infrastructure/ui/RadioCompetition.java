@@ -15,8 +15,9 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
-import ar.unrn.domain.portsin.Concurso;
 import ar.unrn.domain.portsin.RegistroInscripcion;
+import ar.unrn.domain.portsout.Concurso;
+import ar.unrn.domain.portsout.DomainExceptions;
 
 public class RadioCompetition {
 
@@ -82,8 +83,12 @@ public class RadioCompetition {
 	}
 
 	private void todosLosConcursos() {
-		for (Concurso concurso : registroInscripcion.todosLosConcursos()) {
-			comboBox.addItem(concurso.nombre());
+		try {
+			for (Concurso concurso : registroInscripcion.todosLosConcursos()) {
+				comboBox.addItem(concurso.nombre());
+			}
+		} catch (DomainExceptions e) {
+			JOptionPane.showMessageDialog(this.contentPane, e.getMessage());
 		}
 	}
 

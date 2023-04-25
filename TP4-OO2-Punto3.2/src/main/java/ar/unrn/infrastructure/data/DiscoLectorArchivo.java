@@ -14,20 +14,30 @@ import ar.unrn.domain.portsout.LectorArchivo;
 public class DiscoLectorArchivo implements LectorArchivo {
 
 	private List<Concurso> listaConcursos;
+	private String urlArchivoConcursos;
+	private String urlArchivoInscriptos;
 
-	public DiscoLectorArchivo(String urlArchivo) throws DomainExceptions {
+	public DiscoLectorArchivo(String urlArchivoConcursos, String urlArchivoInscriptos) throws DomainExceptions {
+		super();
+		this.urlArchivoConcursos = urlArchivoConcursos;
+		this.urlArchivoInscriptos = urlArchivoInscriptos;
+
+	}
+
+	@Override
+	public List<Concurso> todosLosConcursos() throws DomainExceptions {
+		this.listaConcursos = new ArrayList<Concurso>();
+
 		try {
 			String cadena;
 
-			FileReader f = new FileReader(urlArchivo);
+			FileReader f = new FileReader(urlArchivoConcursos);
 
 			BufferedReader b = new BufferedReader(f);
 
-			// TENES QUE LEER LOS DATOS DEL ARCHIVO
-
 			while ((cadena = b.readLine()) != null) {
 				String[] parts = cadena.split(", ");
-				System.out.println(parts);
+				listaConcursos.add(new Concurso(parts[1]));
 			}
 
 			b.close();
@@ -38,13 +48,8 @@ public class DiscoLectorArchivo implements LectorArchivo {
 		} catch (NullPointerException e) {
 			throw new DomainExceptions("DiscoLectorArchivo NullPointerException");
 		}
-	}
 
-	@Override
-	public List<Concurso> todosLosConcursos() {
-		listaConcursos = new ArrayList<Concurso>();
-
-		return null;
+		return listaConcursos;
 	}
 
 }

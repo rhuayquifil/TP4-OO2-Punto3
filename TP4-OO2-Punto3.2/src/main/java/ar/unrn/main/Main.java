@@ -3,9 +3,12 @@ package ar.unrn.main;
 import javax.swing.SwingUtilities;
 
 import ar.unrn.domain.model.CompetenciaRegistroInscripcion;
+import ar.unrn.domain.portsout.DomainExceptions;
+import ar.unrn.infrastructure.data.DiscoLectorArchivo;
 import ar.unrn.infrastructure.ui.RadioCompetition;
 
 public class Main {
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -20,7 +23,8 @@ public class Main {
 		});
 	}
 
-	private void start() {
-		new RadioCompetition(new CompetenciaRegistroInscripcion());
+	private void start() throws DomainExceptions {
+		new RadioCompetition(new CompetenciaRegistroInscripcion(
+				new DiscoLectorArchivo("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\concursos.txt", "")));
 	}
 }
