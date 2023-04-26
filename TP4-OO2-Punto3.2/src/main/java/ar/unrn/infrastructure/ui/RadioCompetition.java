@@ -13,10 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import ar.unrn.domain.portsin.RegistroInscripcion;
-import ar.unrn.domain.portsout.Concurso;
 import ar.unrn.domain.portsout.DomainExceptions;
 
 public class RadioCompetition {
@@ -43,7 +43,7 @@ public class RadioCompetition {
 		this.registroInscripcion = registroInscripcion;
 
 		var frame = new JFrame("Inscription to Competition");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 451, 229);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,6 +71,7 @@ public class RadioCompetition {
 		txtEmail.setColumns(10);
 		btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				btnOk.setEnabled(false);
 				saveInscription();
@@ -78,14 +79,14 @@ public class RadioCompetition {
 			}
 		});
 		lblCompetition = new JLabel("Concurso:");
-		comboBox = new JComboBox<String>();
+		comboBox = new JComboBox<>();
 		todosLosConcursos();
 	}
 
 	private void todosLosConcursos() {
 		try {
-			for (Concurso concurso : registroInscripcion.todosLosConcursos()) {
-				comboBox.addItem(concurso.nombre());
+			for (String nombreConcurso : registroInscripcion.listaNombreConcursos()) {
+				comboBox.addItem(nombreConcurso);
 			}
 		} catch (DomainExceptions e) {
 			JOptionPane.showMessageDialog(this.contentPane, e.getMessage());
@@ -94,7 +95,13 @@ public class RadioCompetition {
 
 	private void saveInscription() {
 		if (validations()) {
-			// Guarda en inscriptos.txt los datos de la persona y el concurso elegido
+			try {
+				registroInscripcion.inscribirACompeticion(txtId.getText(), txtLastName.getText(), txtName.getText(),
+						txtPhone.getText(), txtEmail.getText(), comboBox.getSelectedIndex());
+			} catch (DomainExceptions e) {
+				JOptionPane.showMessageDialog(this.contentPane, e.getMessage());
+			}
+
 		}
 	}
 
@@ -120,10 +127,10 @@ public class RadioCompetition {
 					"El teléfono debe ingresarse de la siguiente forma: NNNN-NNNNNN");
 			return false;
 		}
-		if (this.comboBox.getSelectedIndex() <= 0) {
-			JOptionPane.showMessageDialog(this.contentPane, "Debe elegir un Concurso");
-			return false;
-		}
+//		if (this.comboBox.getSelectedIndex() <= 0) {
+//			JOptionPane.showMessageDialog(this.contentPane, "Debe elegir un Concurso");
+//			return false;
+//		}
 		return true;
 	}
 

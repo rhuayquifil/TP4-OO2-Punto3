@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 
 import ar.unrn.domain.model.CompetenciaRegistroInscripcion;
 import ar.unrn.domain.portsout.DomainExceptions;
-import ar.unrn.infrastructure.data.DiscoLectorArchivo;
+import ar.unrn.infrastructure.data.DiscoAlmacenDeDatos;
 import ar.unrn.infrastructure.ui.RadioCompetition;
 
 public class Main {
@@ -25,6 +25,7 @@ public class Main {
 
 	private void start() throws DomainExceptions {
 		new RadioCompetition(new CompetenciaRegistroInscripcion(
-				new DiscoLectorArchivo("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\concursos.txt", "")));
+				new DiscoAlmacenDeDatos("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\concursos.txt",
+						"C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\inscriptos.txt")));
 	}
 }

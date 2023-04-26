@@ -1,5 +1,7 @@
 package ar.unrn.domain.portsout;
 
-public record Concurso(String nombre) {
+import java.time.LocalDate;
+
+public record Concurso(String id, String nombre, LocalDate fechaInicioCompetencia, LocalDate fechaFinCompetencia) {
 
 }

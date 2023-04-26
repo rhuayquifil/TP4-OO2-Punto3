@@ -1,24 +1,36 @@
 package ar.unrn.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.unrn.domain.portsin.RegistroInscripcion;
+import ar.unrn.domain.portsout.AlmacenDeDatos;
 import ar.unrn.domain.portsout.Concurso;
 import ar.unrn.domain.portsout.DomainExceptions;
-import ar.unrn.domain.portsout.LectorArchivo;
+import ar.unrn.domain.portsout.Participante;
 
 public class CompetenciaRegistroInscripcion implements RegistroInscripcion {
 
-	private LectorArchivo discoLectorArchivo;
+	private AlmacenDeDatos almacenDeDatos;
 
-	public CompetenciaRegistroInscripcion(LectorArchivo discoLectorArchivo) {
+	public CompetenciaRegistroInscripcion(AlmacenDeDatos almacenDeDatos) {
 		super();
-		this.discoLectorArchivo = discoLectorArchivo;
+		this.almacenDeDatos = almacenDeDatos;
 	}
 
 	@Override
-	public List<Concurso> todosLosConcursos() throws DomainExceptions {
-		// mejora 1
-		return discoLectorArchivo.todosLosConcursos();
+	public void inscribirACompeticion(String id, String apellido, String nombre, String celular, String email,
+			int idConcurso) throws DomainExceptions {
+		almacenDeDatos.inscribir(new Participante(id, apellido, nombre, celular, email, idConcurso + 1));
+	}
+
+	@Override
+	public List<String> listaNombreConcursos() throws DomainExceptions {
+		List<String> listaNombreConcurso = new ArrayList<String>();
+
+		for (Concurso concurso : almacenDeDatos.todosLosConcursos()) {
+			listaNombreConcurso.add(concurso.nombre());
+		}
+		return listaNombreConcurso;
 	}
 }
