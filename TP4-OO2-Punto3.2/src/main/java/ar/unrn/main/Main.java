@@ -3,8 +3,10 @@ package ar.unrn.main;
 import javax.swing.SwingUtilities;
 
 import ar.unrn.domain.model.CompetenciaRegistroInscripcion;
-import ar.unrn.domain.portsout.DomainExceptions;
-import ar.unrn.infrastructure.data.DiscoAlmacenDeDatos;
+import ar.unrn.domain.portsin.DomainExceptions;
+import ar.unrn.domain.portsout.InfrastructureExceptions;
+import ar.unrn.infrastructure.data.DiscoGuardarDatos;
+import ar.unrn.infrastructure.data.DiscoLeerDatos;
 import ar.unrn.infrastructure.ui.RadioCompetition;
 
 public class Main {
@@ -23,9 +25,9 @@ public class Main {
 		});
 	}
 
-	private void start() throws DomainExceptions {
+	private void start() throws DomainExceptions, InfrastructureExceptions {
 		new RadioCompetition(new CompetenciaRegistroInscripcion(
-				new DiscoAlmacenDeDatos("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\concursos.txt",
-						"C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\inscriptos.txt")));
+				new DiscoLeerDatos("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\concursos.txt"),
+				new DiscoGuardarDatos("C:\\Users\\ezehu\\git\\TP4-OO2-Punto3\\inscriptos.txt")));
 	}
 }

@@ -16,8 +16,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import ar.unrn.domain.portsin.DomainExceptions;
 import ar.unrn.domain.portsin.RegistroInscripcion;
-import ar.unrn.domain.portsout.DomainExceptions;
 
 public class RadioCompetition {
 
