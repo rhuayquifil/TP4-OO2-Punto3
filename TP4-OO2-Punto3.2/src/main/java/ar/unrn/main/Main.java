@@ -34,6 +34,8 @@ public class Main {
 				new BaseDeDatosLeerDatos(
 						new BaseDeDatosPropiedades("jdbc:mysql://127.0.0.1/base_tp4_punto3", "root", "")),
 				new BaseDeDatosGuardarDatos(
-						new BaseDeDatosPropiedades("jdbc:mysql://127.0.0.1/base_tp4_punto3", "root", ""))));
+						new BaseDeDatosPropiedades("jdbc:mysql://127.0.0.1/base_tp4_punto3", "root", ""),
+						"INSERT INTO participante (id, apellido, nombre, telefono, email, id_concurso)"
+								+ "VALUES (?, ?, ?, ?, ?, ?);")));
 	}
 }

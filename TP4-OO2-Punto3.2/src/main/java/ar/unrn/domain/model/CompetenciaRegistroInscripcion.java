@@ -1,5 +1,6 @@
 package ar.unrn.domain.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +37,9 @@ public class CompetenciaRegistroInscripcion implements RegistroInscripcion {
 	private void validarDatos(String id, String apellido, String nombre, String celular, String email, int idConcurso)
 			throws DomainExceptions, InfrastructureExceptions {
 		if (validations(id, apellido, nombre, celular, email)) {
+
 			guardaDatos.inscribir(new Participante(id, apellido, nombre, celular, email, idConcurso + 1));
+
 			throw new DomainExceptions("Inscripcion Exitosa");
 		}
 	}
@@ -86,11 +89,11 @@ public class CompetenciaRegistroInscripcion implements RegistroInscripcion {
 	}
 
 	@Override
-	public List<String> listaNombreConcursos() throws DomainExceptions {
+	public List<String> listaNombreConcursosActivos() throws DomainExceptions {
 		List<String> listaNombreConcurso = new ArrayList<String>();
 
 		try {
-			agregarNombresALista(listaNombreConcurso);
+			filtrarConcursosActivos(listaNombreConcurso);
 		} catch (InfrastructureExceptions e) {
 			throw new DomainExceptions("CompetenciaRegistroInscripcion " + e.getMessage());
 		}
@@ -98,9 +101,33 @@ public class CompetenciaRegistroInscripcion implements RegistroInscripcion {
 		return listaNombreConcurso;
 	}
 
-	private void agregarNombresALista(List<String> listaNombreConcurso) throws InfrastructureExceptions {
+	private void filtrarConcursosActivos(List<String> listaNombreConcurso) throws InfrastructureExceptions {
 		for (Concurso concurso : lectorDatos.todosLosConcursos()) {
+			filtroConcurso(listaNombreConcurso, concurso);
+		}
+	}
+
+	private void filtroConcurso(List<String> listaNombreConcurso, Concurso concurso) {
+		if (concursoEnRangoDeInscripcion(concurso)) {
 			listaNombreConcurso.add(concurso.nombre());
 		}
+	}
+
+	private boolean concursoEnRangoDeInscripcion(Concurso concurso) {
+		LocalDate now = LocalDate.now();
+
+		return ((now.isAfter(concurso.fechaInicioCompetencia())
+				|| inscripcionElPrimerDia(concurso.fechaInicioCompetencia(), now))
+				&& (concurso.fechaFinCompetencia().isAfter(now)
+						|| inscripcionDiaFinal(concurso.fechaFinCompetencia(), now)));
+
+	}
+
+	private boolean inscripcionDiaFinal(LocalDate fechaFinCompetencia, LocalDate now) {
+		return (fechaFinCompetencia.compareTo(now) == 0);
+	}
+
+	private boolean inscripcionElPrimerDia(LocalDate fechaInicioCompetencia, LocalDate now) {
+		return (fechaInicioCompetencia.compareTo(now) == 0);
 	}
 }

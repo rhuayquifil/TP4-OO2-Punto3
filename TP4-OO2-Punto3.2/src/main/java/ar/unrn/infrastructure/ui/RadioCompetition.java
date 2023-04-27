@@ -92,7 +92,7 @@ public class RadioCompetition {
 	}
 
 	private void llenarComboBox() throws DomainExceptions {
-		for (String nombreConcurso : registroInscripcion.listaNombreConcursos()) {
+		for (String nombreConcurso : registroInscripcion.listaNombreConcursosActivos()) {
 			comboBox.addItem(nombreConcurso);
 		}
 	}

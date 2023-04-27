@@ -1,3 +1,4 @@
 
 41321062, huayquifil, rodrigo, 1111-222222, ezehuayquifil@hotmail.com, 1
 2, e, e, 2222-555555, w@w.es, 2
+2, r, r, 2222-555555, w@a.es, 1

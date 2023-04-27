@@ -62,4 +62,10 @@ public class DiscoLeerDatos implements LeerDatos {
 			listaConcursos.add(new Concurso(parts[0], parts[1], fechaInicioCompetencia, fechaFinCompetencia));
 		}
 	}
+
+	@Override
+	public Concurso find(int idConcurso) throws InfrastructureExceptions {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

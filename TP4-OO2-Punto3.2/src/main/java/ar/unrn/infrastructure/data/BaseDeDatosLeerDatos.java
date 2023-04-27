@@ -5,7 +5,9 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ar.unrn.domain.portsout.Concurso;
@@ -31,27 +33,48 @@ public class BaseDeDatosLeerDatos implements LeerDatos {
 				java.sql.Statement sent = conn.createStatement();
 				ResultSet resul = sent.executeQuery("SELECT * FROM concurso")) {
 
-			while (resul.next()) {
-				Date dateInicioCompetencia = resul.getDate("fechaInicioCompetencia");
-
-				// TENES QUE LEER CONVERTIR LOS DATE EN LOCALDATE
-
-				Date dateFinCompetencia = resul.getDate("fechaFinCompetencia");
-//				LocalDate fechaFinCompetencia = dateFinCompetencia.toInstant().atZone(ZoneId.systemDefault())
-//						.toLocalDate();
-				System.out.println(dateInicioCompetencia + " " + dateFinCompetencia);
-//
-//				listaConcursos.add(new Concurso(String.valueOf(resul.getInt("id")), resul.getString("nombre"),
-//						fechaInicioCompetencia, fechaFinCompetencia));
-
-//				System.out.println(listaConcursos);
-			}
+			leerResultado(listaConcursos, resul);
 
 		} catch (SQLException e) {
 			throw new InfrastructureExceptions("error al procesar consulta");
 		}
 
 		return listaConcursos;
+	}
+
+	private void leerResultado(List<Concurso> listaConcursos, ResultSet resul) throws SQLException {
+		while (resul.next()) {
+			Calendar calendar = Calendar.getInstance();
+
+			// fecha inicio competencia
+			Date dateInicioCompetencia = resul.getDate("fechaInicioCompetencia");
+
+			calendar.setTime(dateInicioCompetencia);
+
+			LocalDate fechaInicioCompetencia = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
+
+			// fecha fin competencia
+			Date dateFinCompetencia = resul.getDate("fechaFinCompetencia");
+
+			calendar.setTime(dateFinCompetencia);
+
+			LocalDate fechaFinCompetencia = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
+
+			listaConcursos.add(new Concurso(String.valueOf(resul.getInt("id")), resul.getString("nombre"),
+					fechaInicioCompetencia, fechaFinCompetencia));
+		}
+	}
+
+	@Override
+	public Concurso find(int idConcurso) throws InfrastructureExceptions {
+		for (Concurso concurso : todosLosConcursos()) {
+			if (Integer.valueOf(concurso.id()) == idConcurso) {
+				return concurso;
+			}
+		}
+		throw new InfrastructureExceptions("No se encontro concurso con id: " + idConcurso);
 	}
 
 }
