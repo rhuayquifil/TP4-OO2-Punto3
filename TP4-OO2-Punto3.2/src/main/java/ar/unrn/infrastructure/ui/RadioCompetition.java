@@ -85,11 +85,15 @@ public class RadioCompetition {
 
 	private void todosLosConcursos() {
 		try {
-			for (String nombreConcurso : registroInscripcion.listaNombreConcursos()) {
-				comboBox.addItem(nombreConcurso);
-			}
+			llenarComboBox();
 		} catch (DomainExceptions e) {
 			JOptionPane.showMessageDialog(this.contentPane, e.getMessage());
+		}
+	}
+
+	private void llenarComboBox() throws DomainExceptions {
+		for (String nombreConcurso : registroInscripcion.listaNombreConcursos()) {
+			comboBox.addItem(nombreConcurso);
 		}
 	}
 

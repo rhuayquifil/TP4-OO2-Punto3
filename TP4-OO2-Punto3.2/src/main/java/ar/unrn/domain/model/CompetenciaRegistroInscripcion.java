@@ -27,12 +27,17 @@ public class CompetenciaRegistroInscripcion implements RegistroInscripcion {
 	public void inscribirACompeticion(String id, String apellido, String nombre, String celular, String email,
 			int idConcurso) throws DomainExceptions {
 		try {
-			if (validations(id, apellido, nombre, celular, email)) {
-				guardaDatos.inscribir(new Participante(id, apellido, nombre, celular, email, idConcurso + 1));
-				throw new DomainExceptions("Inscripcion Exitosa");
-			}
+			validarDatos(id, apellido, nombre, celular, email, idConcurso);
 		} catch (InfrastructureExceptions | NullPointerException e) {
 			throw new DomainExceptions(e.getMessage());
+		}
+	}
+
+	private void validarDatos(String id, String apellido, String nombre, String celular, String email, int idConcurso)
+			throws DomainExceptions, InfrastructureExceptions {
+		if (validations(id, apellido, nombre, celular, email)) {
+			guardaDatos.inscribir(new Participante(id, apellido, nombre, celular, email, idConcurso + 1));
+			throw new DomainExceptions("Inscripcion Exitosa");
 		}
 	}
 

@@ -15,8 +15,6 @@ import ar.unrn.domain.portsout.LeerDatos;
 
 public class DiscoLeerDatos implements LeerDatos {
 
-	// crear dos interfaces una que lea y otra que escriba
-
 	private List<Concurso> listaConcursos;
 	private String urlArchivo;
 
@@ -37,16 +35,7 @@ public class DiscoLeerDatos implements LeerDatos {
 
 			BufferedReader b = new BufferedReader(f);
 
-			while ((cadena = b.readLine()) != null) {
-				String[] parts = cadena.split(", ");
-
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
-				LocalDate fechaInicioCompetencia = LocalDate.parse(parts[2], formatter);
-				LocalDate fechaFinCompetencia = LocalDate.parse(parts[3], formatter);
-
-				listaConcursos.add(new Concurso(parts[0], parts[1], fechaInicioCompetencia, fechaFinCompetencia));
-			}
+			leerConcursos(b);
 
 			b.close();
 		} catch (FileNotFoundException e) {
@@ -58,5 +47,19 @@ public class DiscoLeerDatos implements LeerDatos {
 		}
 
 		return listaConcursos;
+	}
+
+	private void leerConcursos(BufferedReader b) throws IOException {
+		String cadena;
+		while ((cadena = b.readLine()) != null) {
+			String[] parts = cadena.split(", ");
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+			LocalDate fechaInicioCompetencia = LocalDate.parse(parts[2], formatter);
+			LocalDate fechaFinCompetencia = LocalDate.parse(parts[3], formatter);
+
+			listaConcursos.add(new Concurso(parts[0], parts[1], fechaInicioCompetencia, fechaFinCompetencia));
+		}
 	}
 }
